@@ -68,7 +68,7 @@ for counter_0=1:numFolders_0
                     boundaryDicom= boundarymask(maskDicom);
                     figure,imshow(boundaryDicom),title('Mask Boundary')
                     
-                    % determint the edge of cropped image
+                    % determine the edge of cropped image
                     EdgeIm=edge(Cr,'Prewitt');
                     figure,imshow(EdgeIm),title('Cropped Dicom Image Edge detection -Prewitt ');
                     
