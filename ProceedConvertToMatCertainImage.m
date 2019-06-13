@@ -46,31 +46,40 @@ for counter_0=1:numFolders_0
                     readDicom1= max(readDicom(:))- readDicom;
                     
                     %show image from readDicom
-                    figure,imagesc(readDicom),title('RawImage')
+                    figure,imagesc(readDicom),title('Raw Dicom Image')
                     grid on
                     colormap bone
                     
                     %show image to be cropped
-                    figure,imagesc(readDicom1),title('Proceed Image')
+                    figure,imagesc(readDicom1),title('Processed Dicom Image')
                     
                     [Cr,rect]=imcrop(readDicom1); %cropped region of interest
                     % Cr is Cropped area in the return variable Cr
                     % rect is variable that save the four-element position vector or cropped
                     % rectangle
                     
-                    figure,imagesc(Cr),title('cropped Image')
+                    figure,imagesc(Cr),title('Cropped Image')
                     colormap bone
                     %select region of interest for mask
                     maskDicom=roipoly();
-                    figure, imshow(maskDicom),title('mask image')
+                    figure, imshow(maskDicom),title('Mask Image')
                     
                     % boundary of selected mask by roipoly
                     boundaryDicom= boundarymask(maskDicom);
-                    figure,imshow(boundaryDicom),title('boundary')
-                   
+                    figure,imshow(boundaryDicom),title('Mask Boundary')
+                    
+                    % determint the edge of cropped image
+                    EdgeIm=edge(Cr,'Prewitt');
+                    figure,imshow(EdgeIm),title('Cropped Dicom Image Edge detection -Prewitt ');
+                    
+                    %merge mask image with cropped dicom image
+                    mixedImg = Cr.* uint16(maskDicom);
+                    figure,imagesc(mixedImg),title(' Mask and Cropped Dicom Image merged');
+                    colormap bone;
+                    
+                    
                     %save ReadDicom, infoDicom and maskDicom into .mat file
                     if ChooseDir == 0
-                        %save(['C:\Users\aczf102\Documents\MATLAB\DICOM_Karen_ANDUpdate\Exp\Normals\ANON_N_' infoDicom.PatientID ],'readDicom','infoDicom','maskDicom');
                         save( [strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\Exp\Normals\ANON_N_') infoDicom.PatientID] ,'readDicom','infoDicom','maskDicom');
                     else
                         save([strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\Exp\Patients\ANON_P_') infoDicom.PatientID ],'readDicom','infoDicom','maskDicom');
