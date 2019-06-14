@@ -94,9 +94,7 @@ for counter_0=1:numFolders_0
                     subplot(2,2,2), imshow(EdgeIm), title('Edge of Cropped Image - Prewitt');
                     subplot(2,2,3),imshow(maskDicom),title('Mask Image');
                     subplot(2,2,4),imagesc(mixedImg),colormap bone, title(' Mask and Cropped Dicom Image merged'); 
-                    %subplot(2,3,1),plot(CrImpProfile), title('Bone Profile');
                     
-                    %%this part for align image ?
                     
                 end
             end
