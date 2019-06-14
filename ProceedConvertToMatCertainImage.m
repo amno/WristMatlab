@@ -1,7 +1,7 @@
 
 % clc
-% clear all;
-% close all;
+ clear all;
+ close all;
 
 %%
 baseDir = 'C:\Users\aczf102\Documents\MATLAB';
@@ -57,45 +57,52 @@ for counter_0=1:numFolders_0
                     % Cr is Cropped area in the return variable Cr
                     % rect is variable that save the four-element position vector or cropped
                     % rectangle
-                    
                     figure,imagesc(Cr),title('Cropped Image')
                     colormap bone
+                    
                     %select region of interest for mask
                     maskDicom=roipoly();
-                    figure, imshow(maskDicom),title('Mask Image')
-                    
+                   
                     % boundary of selected mask by roipoly
                     boundaryDicom= boundarymask(maskDicom);
                     figure,imshow(boundaryDicom),title('Mask Boundary')
                     
                     % determine the edge of cropped image
                     EdgeIm=edge(Cr,'Prewitt');
-                    figure,imshow(EdgeIm),title('Cropped Dicom Image Edge detection -Prewitt ');
+                    
+                    % determine the edge of cropped image
+                    EdgeIm2=edge(Cr,'Canny');
                     
                     %merge mask image with cropped dicom image
                     mixedImg = Cr.* uint16(maskDicom);
-                    figure,imagesc(mixedImg),title(' Mask and Cropped Dicom Image merged');
-                    colormap bone;
                     
+                    % pixel-value cross-sections along line segments
+                    
+                   
                     
                     %save ReadDicom, infoDicom and maskDicom into .mat file
                     if ChooseDir == 0
                         save( [strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\Exp\Normals\ANON_N_') infoDicom.PatientID] ,'readDicom','infoDicom','maskDicom');
+                        %close all;
                     else
                         save([strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\Exp\Patients\ANON_P_') infoDicom.PatientID ],'readDicom','infoDicom','maskDicom');
+                        %close all;
                     end
                 
+                    %subplot the results
+                    figure, subplot(2,2,1), imagesc(Cr), colormap bone, title('Cropped Image');
+                    subplot(2,2,2), imshow(EdgeIm), title('Edge of Cropped Image - Prewitt');
+                    subplot(2,2,3),imshow(maskDicom),title('Mask Image');
+                    subplot(2,2,4),imagesc(mixedImg),colormap bone, title(' Mask and Cropped Dicom Image merged'); 
+                    %subplot(2,3,1),plot(CrImpProfile), title('Bone Profile');
+                    
+                    %%this part for align image ?
+                    
                 end
             end
         end
     end
 end
-
-
-
-
-
-
 
 
 
