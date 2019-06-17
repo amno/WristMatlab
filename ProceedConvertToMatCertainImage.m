@@ -43,13 +43,21 @@ for counter_0=1:numFolders_0
                     readDicom=dicomread(strcat(PatientsDir,dir0(counter_0).name,filesep,dir1(counter_1).name,filesep,dir2(counter_2).name,filesep,dir3(counter_3).name,filesep,dir4(counter_4).name));
                     infoDicom=dicominfo(strcat(PatientsDir,dir0(counter_0).name,filesep,dir1(counter_1).name,filesep,dir2(counter_2).name,filesep,dir3(counter_3).name,filesep,dir4(counter_4).name));
                     
-                    readDicom1= max(readDicom(:))- readDicom;
-                    
-                    [rows,cols]            = size(readDicom);
-                    
+                    % This inversion is only necessary for those images
+                    % which have a bright background, if they have a dark
+                    % background it is not necessary.
+                    if strcmp(infoDicom.PhotometricInterpretation,'MONOCHROME2')
+                        readDicom1= max(readDicom(:))- readDicom;
+                    elseif strcmp(infoDicom.PhotometricInterpretation,'MONOCHROME1')
+                        readDicom1 = readDicom;
+                    else
+                        disp('undefined value');
+                        exit();
+                    end
+                                        
                     %alignImage
-                    [HoughBones,HoughAngles,HoughDist]  = hough(readDicom,'Theta',-90:1:(90-1));
-                    PeaksHough                  = houghpeaks(HoughBones,5,'threshold',ceil(0.3*max(HoughBones(:))));
+                    [HoughBones,HoughAngles,HoughDist]  = hough(readDicom,'Theta',-90:1:(90-1)); 
+                    PeaksHough                  = houghpeaks(HoughBones,2,'threshold',ceil(0.3*max(HoughBones(:))));
                     angleRot                    = median(HoughAngles(PeaksHough(:,2)));
                     dicomRotate                 = imrotate(readDicom,angleRot);
                     
@@ -57,7 +65,7 @@ for counter_0=1:numFolders_0
                     figure,imagesc(readDicom),title('Raw Dicom Image')
                     grid on
                     colormap bone
-                    
+                                  
                     %show image to be cropped
                     figure,imagesc(readDicom1),title('Processed Dicom Image')
                     
@@ -65,6 +73,7 @@ for counter_0=1:numFolders_0
                     % Cr is Cropped area in the return variable Cr
                     % rect is variable that save the four-element position vector or cropped
                     % rectangle
+                    
                     figure,imagesc(Cr),title('Cropped Image')
                     colormap bone
                     
@@ -84,19 +93,21 @@ for counter_0=1:numFolders_0
                     %merge mask image with cropped dicom image
                     mixedImg = Cr.* uint16(maskDicom);
                     
-                    % pixel-value cross-sections along line segments
-                    %inprogress
                    
-                    
+                                    
+                   
                     %save ReadDicom, infoDicom and maskDicom into .mat file
                     if ChooseDir == 0
-                        save( [strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\Exp\Normals\ANON_N_') infoDicom.PatientID] ,'readDicom','infoDicom','maskDicom');
+                        saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\Exp\Normals\ANON_N_');
+                        save( [saveDir infoDicom.PatientID] ,'readDicom','infoDicom','maskDicom');
                         %close all;
                     else
-                        save([strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\Exp\Patients\ANON_P_') infoDicom.PatientID ],'readDicom','infoDicom','maskDicom');
+                        saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\Exp\Patients\ANON_P_');
+                        save([saveDir infoDicom.PatientID ],'readDicom','infoDicom','maskDicom');
                         %close all;
                     end
                 
+                                  
                     %subplot the results
                     figure, 
                     subplot(2,3,1), imagesc(readDicom), colormap bone, title('Original Image');
@@ -106,7 +117,7 @@ for counter_0=1:numFolders_0
                     subplot(2,3,5),imshow(maskDicom),title('Mask Image');
                     subplot(2,3,6),imagesc(mixedImg),colormap bone, title(' Mask and Cropped Dicom Image merged'); 
                     
-                    
+                
                 end
             end
         end
