@@ -45,6 +45,14 @@ for counter_0=1:numFolders_0
                     
                     readDicom1= max(readDicom(:))- readDicom;
                     
+                    [rows,cols]            = size(readDicom);
+                    
+                    %alignImage
+                    [HoughBones,HoughAngles,HoughDist]  = hough(readDicom,'Theta',-90:1:(90-1));
+                    PeaksHough                  = houghpeaks(HoughBones,5,'threshold',ceil(0.3*max(HoughBones(:))));
+                    angleRot                    = median(HoughAngles(PeaksHough(:,2)));
+                    dicomRotate                 = imrotate(readDicom,angleRot);
+                    
                     %show image from readDicom
                     figure,imagesc(readDicom),title('Raw Dicom Image')
                     grid on
@@ -77,7 +85,7 @@ for counter_0=1:numFolders_0
                     mixedImg = Cr.* uint16(maskDicom);
                     
                     % pixel-value cross-sections along line segments
-                    
+                    %inprogress
                    
                     
                     %save ReadDicom, infoDicom and maskDicom into .mat file
@@ -90,10 +98,13 @@ for counter_0=1:numFolders_0
                     end
                 
                     %subplot the results
-                    figure, subplot(2,2,1), imagesc(Cr), colormap bone, title('Cropped Image');
-                    subplot(2,2,2), imshow(EdgeIm), title('Edge of Cropped Image - Prewitt');
-                    subplot(2,2,3),imshow(maskDicom),title('Mask Image');
-                    subplot(2,2,4),imagesc(mixedImg),colormap bone, title(' Mask and Cropped Dicom Image merged'); 
+                    figure, 
+                    subplot(2,3,1), imagesc(readDicom), colormap bone, title('Cropped Image');
+                    subplot(2,3,2), imagesc(dicomRotate), colormap bone, title('Cropped Image');
+                    subplot (2,3,3),imagesc(Cr),colormap bone, title('align Image');
+                    subplot(2,3,4), imshow(EdgeIm), title('Edge of Cropped Image');
+                    subplot(2,3,5),imshow(maskDicom),title('Mask Image');
+                    subplot(2,3,6),imagesc(mixedImg),colormap bone, title(' Mask and Cropped Dicom Image merged'); 
                     
                     
                 end
