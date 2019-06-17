@@ -99,9 +99,9 @@ for counter_0=1:numFolders_0
                 
                     %subplot the results
                     figure, 
-                    subplot(2,3,1), imagesc(readDicom), colormap bone, title('Cropped Image');
-                    subplot(2,3,2), imagesc(dicomRotate), colormap bone, title('Cropped Image');
-                    subplot (2,3,3),imagesc(Cr),colormap bone, title('align Image');
+                    subplot(2,3,1), imagesc(readDicom), colormap bone, title('Original Image');
+                    subplot(2,3,2), imagesc(dicomRotate), colormap bone, title('Align Image');
+                    subplot (2,3,3),imagesc(Cr),colormap bone, title('Cropped Image');
                     subplot(2,3,4), imshow(EdgeIm), title('Edge of Cropped Image');
                     subplot(2,3,5),imshow(maskDicom),title('Mask Image');
                     subplot(2,3,6),imagesc(mixedImg),colormap bone, title(' Mask and Cropped Dicom Image merged'); 
