@@ -77,7 +77,7 @@ for counter_0=1:numFolders_0
                         grid on
                         colormap bone
                     
-                        
+                       
                     %show image to be cropped
                    figure,imagesc(readDicom1),title('Processed Dicom Image')
                     
@@ -115,7 +115,9 @@ for counter_0=1:numFolders_0
                     
                    
                     % pixel-value cross-sections along line segments
-                    %inprogress
+                     AxisX = [0 size(dicomRotRemoveEdge2,2)];
+                     AxisY = [size(dicomRotRemoveEdge2,1)/2 size(dicomRotRemoveEdge2,1)/2];
+                     c=improfile(dicomRotRemoveEdge2,AxisX,AxisY);
                    
                    
                     %save ReadDicom, infoDicom and maskDicom into .mat file
@@ -145,16 +147,20 @@ for counter_0=1:numFolders_0
                     %T= otsuthresh(Cr);
                     
                     figure, 
-                    subplot(1,4,1), imagesc(readDicom), colormap bone, title('Original Image');
-                    subplot(1,4,2), imagesc(dicomRotate1), colormap bone, title('Aligned Image Style 1');
-                    subplot(1,4,3), imagesc(dicomRotRemoveEdge),colormap bone, title('edge removed style 1'); 
-                    subplot (1,4,4),imagesc(dicomRotate2), colormap bone, title('Aligned Image Style 2');
+                    subplot(1,5,1), imagesc(readDicom), colormap bone, title('Original Image');
+                    subplot(1,5,2), imagesc(dicomRotate1), colormap bone, title('Aligned Image Style 1');
+                    subplot(1,5,3), imagesc(dicomRotRemoveEdge),colormap bone, title('edge removed style 1'); 
+                    subplot (1,5,4),imagesc(dicomRotate2), colormap bone, title('Aligned Image Style 2');
+                    subplot(1,5,5),imagesc(dicomRotRemoveEdge2),colormap bone, title('edge removed style 2');
                     %subplot(1,5,5),imagesc(Cr),colormap bone, title('Cropped Image');
                     %subplot (1,5,5),imagesc(dicomRotRemoveEdge2),colormap bone, title('edge removed style 2');
                     
-%                     edgeBWThresh=~imbinarize(Cr);
-%                     
-                     figure,imagesc(dicomRotRemoveEdge2),colormap bone, title('edge removed style 2');
+                  %  edgeBWThresh=~imbinarize(Cr);
+                  % figure,imagesc(dicomRotRemoveEdge2),colormap bone, title('edge removed style 2');
+                     
+                     figure,
+                     subplot(1,2,1),histogram(dicomRotRemoveEdge2), title('histogram dicomRotRemoveEdge2');
+                     subplot(1,2,2),plot(c),title('pixel-value cross-sections');
                      
 %                     subplot(1,3,1), imagesc(edgeBWThresh),colormap bone, title('CroppedEdge');
 %                     subplot(2,3,2),plot(mean(mixedImg)),title('mixedmerge intensity');
