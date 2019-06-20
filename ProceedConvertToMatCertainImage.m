@@ -55,11 +55,19 @@ for counter_0=1:numFolders_0
                         exit();
                     end
                                         
-                    %alignImage
+                    %aligned Image vers1
                     [HoughBones,HoughAngles,HoughDist]  = hough(readDicom,'Theta',-90:1:(90-1)); 
                     PeaksHough                  = houghpeaks(HoughBones,2,'threshold',ceil(0.3*max(HoughBones(:))));
                     angleRot                    = median(HoughAngles(PeaksHough(:,2)));
-                    dicomRotate                 = imrotate(readDicom,angleRot);
+                    dicomRotate1                 = imrotate(readDicom,angleRot);
+                    
+                    %aligned Image vers2
+                    BW= edge(readDicom,'canny');
+                    [H, theta, rho] = hough(BW);
+                    P = houghpeaks(H,1);
+                    thetaPeak = theta(P(1,2));
+                    dicomRotate2 = imrotate(readDicom,thetaPeak);
+                    
                     
                     %show image from readDicom
                     figure,imagesc(readDicom),title('Raw Dicom Image')
@@ -94,6 +102,16 @@ for counter_0=1:numFolders_0
                     mixedImg = Cr.* uint16(maskDicom);
                     
                    
+                    % Add crop based on intensity of the box around the
+                    % x-ray *** What is there is no box!?!?!?!?!?  **
+                    dicomRotRemoveEdge=removeDicomEdges(dicomRotate1);
+                    dicomRotRemoveEdge2=removeDicomEdges(dicomRotate2);
+                    
+                    
+                    % pixel-value cross-sections along line segments
+                     AxisX = [0 size(dicomRotRemoveEdge2,2)];
+                     AxisY = [size(dicomRotRemoveEdge2,1)/2 size(dicomRotRemoveEdge2,1)/2];
+                     c=improfile(dicomRotRemoveEdge2,AxisX,AxisY);
                                     
                    
                     %save ReadDicom, infoDicom and maskDicom into .mat file
@@ -111,12 +129,23 @@ for counter_0=1:numFolders_0
                     %subplot the results
                     figure, 
                     subplot(2,3,1), imagesc(readDicom), colormap bone, title('Original Image');
-                    subplot(2,3,2), imagesc(dicomRotate), colormap bone, title('Align Image');
+                    subplot(2,3,2), imagesc(dicomRotate1), colormap bone, title('Align Image');
                     subplot (2,3,3),imagesc(Cr),colormap bone, title('Cropped Image');
                     subplot(2,3,4), imshow(EdgeIm), title('Edge of Cropped Image');
                     subplot(2,3,5),imshow(maskDicom),title('Mask Image');
                     subplot(2,3,6),imagesc(mixedImg),colormap bone, title(' Mask and Cropped Dicom Image merged'); 
                     
+                    figure, 
+                    subplot(1,5,1), imagesc(readDicom), colormap bone, title('Original Image');
+                    subplot(1,5,2), imagesc(dicomRotate1), colormap bone, title('Aligned Image Style 1');
+                    subplot(1,5,3), imagesc(dicomRotRemoveEdge),colormap bone, title('edge removed style 1'); 
+                    subplot (1,5,4),imagesc(dicomRotate2), colormap bone, title('Aligned Image Style 2');
+                    subplot(1,5,5),imagesc(dicomRotRemoveEdge2),colormap bone, title('edge removed style 2');
+                    
+                    figure,
+                     subplot(1,2,1),histogram(dicomRotRemoveEdge2), title('histogram dicomRotRemoveEdge2');
+                     subplot(1,2,2),plot(c),title('pixel-value cross-sections');
+                     
                 
                 end
             end
