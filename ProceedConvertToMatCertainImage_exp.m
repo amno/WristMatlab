@@ -55,7 +55,7 @@ for counter_0=1:numFolders_0
                         disp('undefined value');
                         exit();
                     end
-                    %[rows,cols]            = size(readDicom);
+                    
                     
                     %alignImage vers1
                     [HoughBones,HoughAngles,HoughDist]  = hough(readDicom,'Theta',-90:1:(90-1)); 
@@ -119,7 +119,55 @@ for counter_0=1:numFolders_0
                      AxisY = [size(dicomRotRemoveEdge2,1)/2 size(dicomRotRemoveEdge2,1)/2];
                      c=improfile(dicomRotRemoveEdge2,AxisX,AxisY);
                    
-                   
+                     
+                     %Wrist Segmentation
+%                                                 [rows,cols]        = size(readDicom);
+%                                                  xMask              = uint16(zeros(size(readDicom)));
+%                                                  wristDicom         = regionprops(xMask,readDicom,'Area','Centroid','meanIntensity');
+%                                          % Calibration of Distances CM in Pixels
+%                                                  CmInPixels                              = round((10/infoDicom.PixelSpacing(1)));
+% 
+% 
+%                                          %only look for unique value that might correlated to
+%                                          %minimum or maximum values
+%                                          sortedValues_Xray                       = unique(readDicom);
+%                                          %looking for not a number or empty values
+%                                          readDicomNaNValues = readDicom;
+%                                          readDicomNaNValues(readDicom<=sortedValues_Xray(2))   = nan;
+% 
+%                                          %left or right -- > like PA xray
+%                                          maxIntensity=max(readDicom(:));
+%                                          PixelsIntensityMax=imdilate(readDicom==(maxIntensity),ones(9));
+%                                          maxPixel= find(max(PixelsIntensityMax));
+%                                          newPixelMax=mean(maxPixel);
+% 
+% 
+%                                          rLunate                                 = round(wristDicom(1).Centroid(2));
+%                                          cLunate                                 = round(wristDicom(1).Centroid(1));
+% 
+%                                          %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+%                                         % remove the edge of the border
+%                                         gaussF = [5 5 1];
+%                                         Xray_border                             = 1-imdilate(readDicom==0,ones(35));
+%                                         if abs(cLunate-cMaxPixels)>150
+%                                             Xray_LPF                            = imfilter(readDicom,gaussF).*(1-maxPixels).*Xray_border;
+%                                         else
+%                                             Xray_LPF                            = imfilter(readDicom,gaussF).*Xray_border;
+%                                         end
+% 
+% 
+%                                         %crop region
+%                                         regionBelowLunate                       = Xray_LPF(rLunate-CmInPixels:end-100,:);
+%                                         regionBelowLunate_nan                   = readDicomNaNValues(rLunate-CmInPixels:end-100,:);
+% 
+%                                         figure,
+%                                         subplot(1,2,1),imagesc(regionBelowLunate),colormap bone, title('region below lunate');
+%                                         subplot(1,2,2),imagesc(regionBelowLunate_nan),colormap bone, title('region below lunate NaN');
+
+                    
+                    
+                     
                     %save ReadDicom, infoDicom and maskDicom into .mat file
                     if ChooseDir == 0
                         saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\Exp\Normals\ANON_N_');
