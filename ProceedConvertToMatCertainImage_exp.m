@@ -46,9 +46,9 @@ for counter_0=1:numFolders_0
                     % This inversion is only necessary for those images
                     % which have a bright background, if they have a dark
                     % background it is not necessary.
-                    if strcmp(infoDicom.PhotometricInterpretation,'MONOCHROME2')
+                    if strcmp(infoDicom.PhotometricInterpretation,'MONOCHROME2')  % minimum value is intended to be displayes as white
                         readDicom1= max(readDicom(:))- readDicom;
-                    elseif strcmp(infoDicom.PhotometricInterpretation,'MONOCHROME1')
+                    elseif strcmp(infoDicom.PhotometricInterpretation,'MONOCHROME1')% minimum value is intended to be displayes as black
                         %readDicom1 = readDicom;
                         readDicom1 = min(readDicom(:))+ readDicom;
                     else
@@ -87,8 +87,7 @@ for counter_0=1:numFolders_0
                     dicomRotRemoveEdge=removeDicomEdges(dicomRotate1);
                     dicomRotRemoveEdge2=removeDicomEdges(dicomRotate2);
                     
-                    
-                    
+                     
                     [Cr,rect]=imcrop(readDicom1); %cropped region of interest
                     % Cr is Cropped area in the return variable Cr
                     % rect is variable that save the four-element position vector or cropped
