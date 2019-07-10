@@ -23,14 +23,20 @@
 % readDicom = dicomread('C:\Users\aczf102\Documents\MATLAB\Data\Normals\N1\PAT11\STD1\SER1\IMG0');  % LA -good
 % infoDicom = dicominfo('C:\Users\aczf102\Documents\MATLAB\Data\Normals\N1\PAT11\STD1\SER1\IMG0');
 
-readDicom = dicomread('C:\Users\aczf102\Documents\MATLAB\Data\Normals\N1\PAT12\STD1\SER2\IMG0'); %LA-good
-infoDicom = dicominfo('C:\Users\aczf102\Documents\MATLAB\Data\Normals\N1\PAT12\STD1\SER2\IMG0');
+% readDicom = dicomread('C:\Users\aczf102\Documents\MATLAB\Data\Normals\N1\PAT12\STD1\SER2\IMG0'); %LA-good
+% infoDicom = dicominfo('C:\Users\aczf102\Documents\MATLAB\Data\Normals\N1\PAT12\STD1\SER2\IMG0');
 
 % readDicom = dicomread('C:\Users\aczf102\Documents\MATLAB\Data\Normals\N1\PAT10\STD1\SER2\IMG0'); %PA-good aligned,bad crop
 % infoDicom = dicominfo('C:\Users\aczf102\Documents\MATLAB\Data\Normals\N1\PAT10\STD1\SER2\IMG0');
 
+% readDicom = dicomread('C:\Users\aczf102\Documents\MATLAB\Data\Patients\T01_Tranche1\PAT1\STD1\SER1\IMG1'); %PA normal but extreme 90degree changes
+% infoDicom = dicominfo('C:\Users\aczf102\Documents\MATLAB\Data\Patients\T01_Tranche1\PAT1\STD1\SER1\IMG1');
 
+% readDicom = dicomread('C:\Users\aczf102\Documents\MATLAB\Data\Patients\T01_Tranche1\PAT4\STD1\SER1\IMG0');  %LA quite good
+% infoDicom = dicominfo('C:\Users\aczf102\Documents\MATLAB\Data\Patients\T01_Tranche1\PAT4\STD1\SER1\IMG0');
 
+readDicom = dicomread('C:\Users\aczf102\Documents\MATLAB\Data\Patients\T01_Tranche1\PAT5\STD1\SER2\IMG0');  
+infoDicom = dicominfo('C:\Users\aczf102\Documents\MATLAB\Data\Patients\T01_Tranche1\PAT5\STD1\SER2\IMG0');
 
 readDicomD=double(readDicom);
 
@@ -52,9 +58,8 @@ BW_P = regionprops(BW_L,'Area','majoraxislength','eccentricity');
 P = houghpeaks(H,2); %previously P = houghpeaks(H,1);
 thetaPeak = theta(P(1,2));
 
+%
 dicomRotate2 = imrotate(readDicom,thetaPeak);
-
-
 
 
 %%
@@ -250,13 +255,6 @@ subplot(1,3,3), imagesc(ismember(BW_L2,find([BW_P2.Eccentricity]>0.99))),colorma
 %  currentFile = 'C:\Users\aczf102\Documents\MATLAB\Data\Normals\N1\PAT6\STD1\SER1\IMG0';
 %  cropDicomImageMask= zeros(size(cropDicomImage));
 %  [AreaInflammation,widthAtCM,inflammationLines,inflamationLimits]    = analyseLandmarkLunate_Exp (cropDicomImage,cropDicomImageMask,infoDicom,currentFile,1);
-
-
-
-
-
-
-
 
 
 
