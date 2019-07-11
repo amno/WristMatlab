@@ -60,7 +60,7 @@ for counter_0=1:numFolders_0
                     
                     
                     %alignImage vers1
-                    [HoughBones,HoughAngles,HoughDist]  = hough(readDicom,'Theta',-90:1:(90-1)); 
+                    [HoughBones,HoughAngles,HoughDist]  = hough(readDicom,'Theta',-90:1:(90-1));
                     PeaksHough                  = houghpeaks(HoughBones,2,'threshold',ceil(0.3*max(HoughBones(:))));
                     angleRot                    = median(HoughAngles(PeaksHough(:,2)));
                     dicomRotate1                 = imrotate(readDicom,angleRot);
@@ -79,11 +79,11 @@ for counter_0=1:numFolders_0
                     
                     
                     %show image from readDicom
-%                        figure,imagesc(readDicom),title('Raw Dicom Image')
-%                         grid on
-%                         colormap bone
+                    %                        figure,imagesc(readDicom),title('Raw Dicom Image')
+                    %                         grid on
+                    %                         colormap bone
                     
-                                     
+                    
                     % Add crop based on intensity of the box around the
                     % x-ray *** What is there is no box!?!?!?!?!?  **
                     dicomRotRemoveEdge=removeDicomEdges(dicomRotate1);
@@ -91,89 +91,200 @@ for counter_0=1:numFolders_0
                     
                     
                     % pixel-value cross-sections along line segments
-                     AxisX = [0 size(dicomRotRemoveEdge2,2)];
-                     AxisY = [size(dicomRotRemoveEdge2,1)/2 size(dicomRotRemoveEdge2,1)/2];
-                     c=improfile(dicomRotRemoveEdge2,AxisX,AxisY);
-                   
-                                          
-                    %save ReadDicom, infoDicom and maskDicom into .mat file
+                    AxisX = [0 size(dicomRotRemoveEdge2,2)];
+                    AxisY = [size(dicomRotRemoveEdge2,1)/2 size(dicomRotRemoveEdge2,1)/2];
+                    c=improfile(dicomRotRemoveEdge2,AxisX,AxisY);
+                    
+                    
+                    %save ReadDicom, infoDicom and other features into .mat file
                     if ChooseDir == 0
-                        if strcmp(infoDicom.PhotometricInterpretation,'MONOCHROME1')  %monochrome 1, and thetaPeak between -10 to 10
-                            if (thetaPeak >= -10)&& (thetaPeak <= 10)
-                                saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PhotoMetricAndTheta\Normals\Monochrome1\InCategory\ANON_N_');
-                                %saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\ThetaAlign\Normals\ThetaInRange\ANON_N_');
-                                %save( [saveDir infoDicom.PatientID] ,'readDicom','infoDicom','maskDicom');
-                                save( [saveDir infoDicom.PatientID] ,'readDicom','infoDicom','BW_P','thetaPeak','dicomRotate2');
-                                %close all;
-                                
-                                %figure,
-                                %subplot(1,2,1),imagesc(readDicom), colormap bone, title('Original Image');
-                                %subplot(1,2,2),imagesc(dicomRotate2),colormap bone, title('Processed Image_MN1')
-                            
-                            else
-                                saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PhotoMetricAndTheta\Normals\Monochrome1\OutCategory\ANON_N_');
-                                %saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\ThetaAlign\Normals\ThetaOutOfRange\ANON_N_');
-                                %save( [saveDir infoDicom.PatientID] ,'readDicom','infoDicom','maskDicom');
-                                save( [saveDir infoDicom.PatientID] ,'readDicom','infoDicom','BW_P','thetaPeak','dicomRotate2');
-                            end
-                        elseif strcmp(infoDicom.PhotometricInterpretation,'MONOCHROME2')
-                            if (thetaPeak >= -10)&& (thetaPeak <= 10)
-                                saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PhotoMetricAndTheta\Normals\Monochrome2\InCategory\ANON_N_');
-                                %saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\ThetaAlign\Normals\ThetaInRange\ANON_N_');
-                                %save( [saveDir infoDicom.PatientID] ,'readDicom','infoDicom','maskDicom');
-                                save( [saveDir infoDicom.PatientID] ,'readDicom','infoDicom','BW_P','thetaPeak');
-                                %close all;
-                                figure,
-                                subplot(1,2,1),imagesc(readDicom), colormap bone, title('Original Image');
-                                subplot(1,2,2),imagesc(dicomRotate2),colormap bone, title('Processed Image_MN2')
-                            else
-                                saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PhotoMetricAndTheta\Normals\Monochrome2\OutCategory\ANON_N_');
-                                %saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\ThetaAlign\Normals\ThetaOutOfRange\ANON_N_');
-                                %save( [saveDir infoDicom.PatientID] ,'readDicom','infoDicom','maskDicom');
-                                save( [saveDir infoDicom.PatientID] ,'readDicom','infoDicom','BW_P','thetaPeak');
+                        if strcmp(infoDicom.BodyPartExamined,'HAND')|| strcmp(infoDicom.BodyPartExamined,'WRIST')|| strcmp(infoDicom.BodyPartExamined,'ARM')||strcmp(infoDicom.BodyPartExamined,'FOREARM')
+                            if strcmp(infoDicom.SeriesDescription,'PA')||strcmp(infoDicom.SeriesDescription,'AP')||strcmp(infoDicom.SeriesDescription,'WRIST PA')||strcmp(infoDicom.ViewPosition,'PA')||strcmp(infoDicom.ViewPosition,'AP')||strcmp(infoDicom.ViewPosition,'WRIST PA')||strcmp(infoDicom.ViewPosition,'AP Wireless')||strcmp(infoDicom.SeriesDescription,'AP Wireless')||strcmp(infoDicom.ViewPosition,'DP Wireless')||strcmp(infoDicom.SeriesDescription,'DP Wireless')
+                                %if strcmp(infoDicom.SeriesDescription,'PA')||strcmp(infoDicom.SeriesDescription,'AP')||strcmp(infoDicom.SeriesDescription,'WRIST PA')
+                                %if strcmp(infoDicom.SeriesDescription,'PA')||strcmp(infoDicom.SeriesDescription,'AP')||strcmp(infoDicom.SeriesDescription,'WRIST PA')
+                                %if strcmp(infoDicom.ViewPosition,'PA')||strcmp(infoDicom.ViewPosition,'AP')||strcmp(infoDicom.ViewPosition,'WRIST PA')
+                                if strcmp(infoDicom.PhotometricInterpretation,'MONOCHROME1') %monochrome 1, and thetaPeak between -10 to 10
+                                    if (thetaPeak >= -10)&& (thetaPeak <= 10)
+                                        saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PositionPhotoMetricTheta\Normals\PA\Monochrome1\InCategory\ANON_N_');
+                                        %saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PhotoMetricAndTheta\Normals\Monochrome1\InCategory\ANON_N_');
+                                        %saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\ThetaAlign\Normals\ThetaInRange\ANON_N_');
+                                        %save( [saveDir infoDicom.PatientID] ,'readDicom','infoDicom','maskDicom');
+                                        save( [saveDir infoDicom.PatientID] ,'readDicom','infoDicom','BW_P','thetaPeak','dicomRotate2');
+                                        %close all;
+                                        
+                                        %figure,
+                                        %subplot(1,2,1),imagesc(readDicom), colormap bone, title('Original Image');
+                                        %subplot(1,2,2),imagesc(dicomRotate2),colormap bone, title('Processed Image_MN1')
+                                        
+                                    else
+                                        saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PositionPhotoMetricTheta\Normals\PA\Monochrome1\OutCategory\ANON_N_');
+                                        %saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PhotoMetricAndTheta\Normals\Monochrome1\OutCategory\ANON_N_');
+                                        %saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\ThetaAlign\Normals\ThetaOutOfRange\ANON_N_');
+                                        %save( [saveDir infoDicom.PatientID] ,'readDicom','infoDicom','maskDicom');
+                                        save( [saveDir infoDicom.PatientID] ,'readDicom','infoDicom','BW_P','thetaPeak','dicomRotate2');
+                                    end
+                                elseif strcmp(infoDicom.PhotometricInterpretation,'MONOCHROME2')
+                                    if (thetaPeak >= -10)&& (thetaPeak <= 10)
+                                        saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PositionPhotoMetricTheta\Normals\PA\Monochrome2\InCategory\ANON_N_');
+                                        %saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PhotoMetricAndTheta\Normals\Monochrome2\InCategory\ANON_N_');
+                                        %saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\ThetaAlign\Normals\ThetaInRange\ANON_N_');
+                                        %save( [saveDir infoDicom.PatientID] ,'readDicom','infoDicom','maskDicom');
+                                        save( [saveDir infoDicom.PatientID] ,'readDicom','infoDicom','BW_P','thetaPeak','dicomRotate2');
+                                        %close all;
+                                        figure,
+                                        subplot(1,2,1),imagesc(readDicom), colormap bone, title('Original Image');
+                                        subplot(1,2,2),imagesc(dicomRotate2),colormap bone, title('Processed Image_MN2')
+                                    else
+                                        saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PositionPhotoMetricTheta\Normals\PA\Monochrome2\OutCategory\ANON_N_');
+                                        %saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PhotoMetricAndTheta\Normals\Monochrome2\OutCategory\ANON_N_');
+                                        %saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\ThetaAlign\Normals\ThetaOutOfRange\ANON_N_');
+                                        %save( [saveDir infoDicom.PatientID] ,'readDicom','infoDicom','maskDicom');
+                                        save( [saveDir infoDicom.PatientID] ,'readDicom','infoDicom','BW_P','thetaPeak','dicomRotate2');
+                                    end
+                                end
+                            elseif strcmp(infoDicom.SeriesDescription,'LAT')||strcmp(infoDicom.SeriesDescription,'Lateral')||strcmp(infoDicom.SeriesDescription,'WRIST LAT')||strcmp(infoDicom.ViewPosition,'LAT')||strcmp(infoDicom.ViewPosition,'Lateral')||strcmp(infoDicom.ViewPosition,'WRIST LAT')||strcmp(infoDicom.ViewPosition,'Lateral Wireless')||strcmp(infoDicom.SeriesDescription,'Lateral Wireless')||strcmp(infoDicom.ViewPosition,'Wrist AP/LAT')||strcmp(infoDicom.SeriesDescription,'Wrist AP/LAT')||strcmp(infoDicom.ViewPosition,'LAT Wrist')||strcmp(infoDicom.SeriesDescription,'LAT Wrist')
+                                %elseif strcmp(infoDicom.SeriesDescription,'LAT')||strcmp(infoDicom.SeriesDescription,'Lateral')||strcmp(infoDicom.SeriesDescription,'WRIST LAT')
+                                %elseif strcmp(infoDicom.ViewPosition,'LAT')||strcmp(infoDicom.ViewPosition,'Lateral')||strcmp(infoDicom.ViewPosition,'WRIST LAT')
+                                if strcmp(infoDicom.PhotometricInterpretation,'MONOCHROME1') %monochrome 1, and thetaPeak between -10 to 10
+                                    if (thetaPeak >= -10)&& (thetaPeak <= 10)
+                                        saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PositionPhotoMetricTheta\Normals\LA\Monochrome1\InCategory\ANON_N_');
+                                        %saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PhotoMetricAndTheta\Normals\Monochrome1\InCategory\ANON_N_');
+                                        %saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\ThetaAlign\Normals\ThetaInRange\ANON_N_');
+                                        %save( [saveDir infoDicom.PatientID] ,'readDicom','infoDicom','maskDicom');
+                                        save( [saveDir infoDicom.PatientID] ,'readDicom','infoDicom','BW_P','thetaPeak','dicomRotate2');
+                                        %close all;
+                                        
+                                        %figure,
+                                        %subplot(1,2,1),imagesc(readDicom), colormap bone, title('Original Image');
+                                        %subplot(1,2,2),imagesc(dicomRotate2),colormap bone, title('Processed Image_MN1')
+                                        
+                                    else
+                                        saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PositionPhotoMetricTheta\Normals\LA\Monochrome1\OutCategory\ANON_N_');
+                                        %saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PhotoMetricAndTheta\Normals\Monochrome1\OutCategory\ANON_N_');
+                                        %saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\ThetaAlign\Normals\ThetaOutOfRange\ANON_N_');
+                                        %save( [saveDir infoDicom.PatientID] ,'readDicom','infoDicom','maskDicom');
+                                        save( [saveDir infoDicom.PatientID] ,'readDicom','infoDicom','BW_P','thetaPeak','dicomRotate2');
+                                    end
+                                elseif strcmp(infoDicom.PhotometricInterpretation,'MONOCHROME2')
+                                    if (thetaPeak >= -10)&& (thetaPeak <= 10)
+                                        saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PositionPhotoMetricTheta\Normals\LA\Monochrome2\InCategory\ANON_N_');
+                                        %saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PhotoMetricAndTheta\Normals\Monochrome2\InCategory\ANON_N_');
+                                        %saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\ThetaAlign\Normals\ThetaInRange\ANON_N_');
+                                        %save( [saveDir infoDicom.PatientID] ,'readDicom','infoDicom','maskDicom');
+                                        save( [saveDir infoDicom.PatientID] ,'readDicom','infoDicom','BW_P','thetaPeak','dicomRotate2');
+                                        %close all;
+                                        figure,
+                                        subplot(1,2,1),imagesc(readDicom), colormap bone, title('Original Image');
+                                        subplot(1,2,2),imagesc(dicomRotate2),colormap bone, title('Processed Image_MN2')
+                                    else
+                                        saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PositionPhotoMetricTheta\Normals\LA\Monochrome2\OutCategory\ANON_N_');
+                                        %saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PhotoMetricAndTheta\Normals\Monochrome2\OutCategory\ANON_N_');
+                                        %saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\ThetaAlign\Normals\ThetaOutOfRange\ANON_N_');
+                                        %save( [saveDir infoDicom.PatientID] ,'readDicom','infoDicom','maskDicom');
+                                        save( [saveDir infoDicom.PatientID] ,'readDicom','infoDicom','BW_P','thetaPeak','dicomRotate2');
+                                    end
+                                end 
                             end
                         end
                         
-                    elseif ChooseDir == 1
-                        if strcmp(infoDicom.PhotometricInterpretation,'MONOCHROME1') %monochrome 1, and thetaPeak between -10 to 10
-                            if (thetaPeak >= -10)&& (thetaPeak <= 10)
-                                saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PhotoMetricAndTheta\Patients\Monochrome1\InCategory\ANON_N_');
-                                %saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\ThetaAlign\Patients\ThetaInRange\ANON_P_');
-                                %save([saveDir infoDicom.PatientID ],'readDicom','infoDicom','maskDicom');
-                                save([saveDir infoDicom.PatientID ],'readDicom','infoDicom','BW_P','thetaPeak');
-                                %close all;
-                                
-                                %figure,
-                                %subplot(1,2,1),imagesc(readDicom), colormap bone, title('Original Image');
-                                %subplot(1,2,2),imagesc(dicomRotate2),colormap bone, title('Processed Image_MN1')
-                            else
-                                saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PhotoMetricAndTheta\Patients\Monochrome1\OutCategory\ANON_N_');
-                                %saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\ThetaAlign\Patients\ThetaOutOfRange\ANON_P_');
-                                %save([saveDir infoDicom.PatientID ],'readDicom','infoDicom','maskDicom');
-                                save([saveDir infoDicom.PatientID ],'readDicom','infoDicom','BW_P','thetaPeak');
-                            end
-                        elseif strcmp(infoDicom.PhotometricInterpretation,'MONOCHROME2')
-                           if (thetaPeak >= -10)&& (thetaPeak <= 10)
-                                saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PhotoMetricAndTheta\Patients\Monochrome2\InCategory\ANON_N_');
-                                %saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\ThetaAlign\Normals\ThetaInRange\ANON_N_');
-                                %save( [saveDir infoDicom.PatientID] ,'readDicom','infoDicom','maskDicom');
-                                save( [saveDir infoDicom.PatientID] ,'readDicom','infoDicom','BW_P','thetaPeak');
-                                %close all;
-                                
-                                %figure,
-                                %subplot(1,2,1),imagesc(readDicom), colormap bone, title('Original Image');
-                                %subplot(1,2,2),imagesc(dicomRotate2),colormap bone, title('Processed Image_MN2')
-                            else
-                                saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PhotoMetricAndTheta\Patients\Monochrome2\OutCategory\ANON_N_');
-                                %saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\ThetaAlign\Normals\ThetaOutOfRange\ANON_N_');
-                                %save( [saveDir infoDicom.PatientID] ,'readDicom','infoDicom','maskDicom');
-                                save( [saveDir infoDicom.PatientID] ,'readDicom','infoDicom','BW_P','thetaPeak');
+                    elseif ChooseDir == 1 % still in process of code updating to accomodate infoDicom.ViewPosition attribute
+                        if strcmp(infoDicom.BodyPartExamined,'HAND')|| strcmp(infoDicom.BodyPartExamined,'WRIST')|| strcmp(infoDicom.BodyPartExamined,'ARM')||strcmp(infoDicom.BodyPartExamined,'FOREARM')
+                            if strcmp(infoDicom.SeriesDescription,'PA')||strcmp(infoDicom.SeriesDescription,'AP')||strcmp(infoDicom.SeriesDescription,'WRIST PA')||strcmp(infoDicom.ViewPosition,'PA')||strcmp(infoDicom.ViewPosition,'AP')||strcmp(infoDicom.ViewPosition,'WRIST PA')||strcmp(infoDicom.ViewPosition,'AP Wireless')||strcmp(infoDicom.SeriesDescription,'AP Wireless')||strcmp(infoDicom.ViewPosition,'DP Wireless')||strcmp(infoDicom.SeriesDescription,'DP Wireless')
+                                if strcmp(infoDicom.PhotometricInterpretation,'MONOCHROME1') %monochrome 1, and thetaPeak between -10 to 10
+                                    if (thetaPeak >= -10)&& (thetaPeak <= 10)
+                                        saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PositionPhotoMetricTheta\Patients\PA\Monochrome1\InCategory\ANON_P_');
+                                        %saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PhotoMetricAndTheta\Patients\Monochrome1\InCategory\ANON_N_');
+                                        %saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\ThetaAlign\Patients\ThetaInRange\ANON_P_');
+                                        %save([saveDir infoDicom.PatientID ],'readDicom','infoDicom','maskDicom');
+                                        save([saveDir infoDicom.PatientID ],'readDicom','infoDicom','BW_P','thetaPeak','dicomRotate2');
+                                        %close all;
+                                        
+                                        %figure,
+                                        %subplot(1,2,1),imagesc(readDicom), colormap bone, title('Original Image');
+                                        %subplot(1,2,2),imagesc(dicomRotate2),colormap bone, title('Processed Image_MN1')
+                                    else
+                                        saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PositionPhotoMetricTheta\Patients\PA\Monochrome1\OutCategory\ANON_P_');
+                                        %saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PhotoMetricAndTheta\Patients\Monochrome1\OutCategory\ANON_N_');
+                                        %saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\ThetaAlign\Patients\ThetaOutOfRange\ANON_P_');
+                                        %save([saveDir infoDicom.PatientID ],'readDicom','infoDicom','maskDicom');
+                                        save([saveDir infoDicom.PatientID ],'readDicom','infoDicom','BW_P','thetaPeak','dicomRotate2');
+                                    end
+                                elseif strcmp(infoDicom.PhotometricInterpretation,'MONOCHROME2')
+                                    if (thetaPeak >= -10)&& (thetaPeak <= 10)
+                                        saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PositionPhotoMetricTheta\Patients\PA\Monochrome2\InCategory\ANON_P_');
+                                        %saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PhotoMetricAndTheta\Patients\Monochrome2\InCategory\ANON_N_');
+                                        %saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\ThetaAlign\Normals\ThetaInRange\ANON_N_');
+                                        %save( [saveDir infoDicom.PatientID] ,'readDicom','infoDicom','maskDicom');
+                                        save( [saveDir infoDicom.PatientID] ,'readDicom','infoDicom','BW_P','thetaPeak','dicomRotate2');
+                                        %close all;
+                                        
+                                        %figure,
+                                        %subplot(1,2,1),imagesc(readDicom), colormap bone, title('Original Image');
+                                        %subplot(1,2,2),imagesc(dicomRotate2),colormap bone, title('Processed Image_MN2')
+                                    else
+                                        saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PositionPhotoMetricTheta\Patients\PA\Monochrome2\OutCategory\ANON_P_');
+                                        %saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PhotoMetricAndTheta\Patients\Monochrome2\OutCategory\ANON_N_');
+                                        %saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\ThetaAlign\Normals\ThetaOutOfRange\ANON_N_');
+                                        %save( [saveDir infoDicom.PatientID] ,'readDicom','infoDicom','maskDicom');
+                                        save( [saveDir infoDicom.PatientID] ,'readDicom','infoDicom','BW_P','thetaPeak','dicomRotate2');
+                                    end
+                                end
+                            elseif strcmp(infoDicom.SeriesDescription,'LAT')||strcmp(infoDicom.SeriesDescription,'Lateral')||strcmp(infoDicom.SeriesDescription,'WRIST LAT')||strcmp(infoDicom.ViewPosition,'LAT')||strcmp(infoDicom.ViewPosition,'Lateral')||strcmp(infoDicom.ViewPosition,'WRIST LAT')||strcmp(infoDicom.ViewPosition,'Lateral Wireless')||strcmp(infoDicom.SeriesDescription,'Lateral Wireless')||strcmp(infoDicom.ViewPosition,'Wrist AP/LAT')||strcmp(infoDicom.SeriesDescription,'Wrist AP/LAT')||strcmp(infoDicom.ViewPosition,'LAT Wrist')||strcmp(infoDicom.SeriesDescription,'LAT Wrist')
+                                if strcmp(infoDicom.PhotometricInterpretation,'MONOCHROME1') %monochrome 1, and thetaPeak between -10 to 10
+                                    if (thetaPeak >= -10)&& (thetaPeak <= 10)
+                                        saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PositionPhotoMetricTheta\Patients\LA\Monochrome1\InCategory\ANON_P_');
+                                        %saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PhotoMetricAndTheta\Patients\Monochrome1\InCategory\ANON_N_');
+                                        %saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\ThetaAlign\Patients\ThetaInRange\ANON_P_');
+                                        %save([saveDir infoDicom.PatientID ],'readDicom','infoDicom','maskDicom');
+                                        save([saveDir infoDicom.PatientID ],'readDicom','infoDicom','BW_P','thetaPeak','dicomRotate2');
+                                        %close all;
+                                        
+                                        %figure,
+                                        %subplot(1,2,1),imagesc(readDicom), colormap bone, title('Original Image');
+                                        %subplot(1,2,2),imagesc(dicomRotate2),colormap bone, title('Processed Image_MN1')
+                                    else
+                                        saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PositionPhotoMetricTheta\Patients\LA\Monochrome1\OutCategory\ANON_P_');
+                                        %saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PhotoMetricAndTheta\Patients\Monochrome1\OutCategory\ANON_N_');
+                                        %saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\ThetaAlign\Patients\ThetaOutOfRange\ANON_P_');
+                                        %save([saveDir infoDicom.PatientID ],'readDicom','infoDicom','maskDicom');
+                                        save([saveDir infoDicom.PatientID ],'readDicom','infoDicom','BW_P','thetaPeak','dicomRotate2');
+                                    end
+                                elseif strcmp(infoDicom.PhotometricInterpretation,'MONOCHROME2')
+                                    if (thetaPeak >= -10)&& (thetaPeak <= 10)
+                                        saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PositionPhotoMetricTheta\Patients\LA\Monochrome2\InCategory\ANON_P_');
+                                        %saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PhotoMetricAndTheta\Patients\Monochrome2\InCategory\ANON_N_');
+                                        %saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\ThetaAlign\Normals\ThetaInRange\ANON_N_');
+                                        %save( [saveDir infoDicom.PatientID] ,'readDicom','infoDicom','maskDicom');
+                                        save( [saveDir infoDicom.PatientID] ,'readDicom','infoDicom','BW_P','thetaPeak','dicomRotate2');
+                                        %close all;
+                                        
+                                        %figure,
+                                        %subplot(1,2,1),imagesc(readDicom), colormap bone, title('Original Image');
+                                        %subplot(1,2,2),imagesc(dicomRotate2),colormap bone, title('Processed Image_MN2')
+                                    else
+                                        saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PositionPhotoMetricTheta\Patients\LA\Monochrome2\OutCategory\ANON_P_');
+                                        %saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PhotoMetricAndTheta\Patients\Monochrome2\OutCategory\ANON_N_');
+                                        %saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\ThetaAlign\Normals\ThetaOutOfRange\ANON_N_');
+                                        %save( [saveDir infoDicom.PatientID] ,'readDicom','infoDicom','maskDicom');
+                                        save( [saveDir infoDicom.PatientID] ,'readDicom','infoDicom','BW_P','thetaPeak','dicomRotate2');
+                                    end
+                                end
                             end
                         end
-                    else
-                        disp('wrong input');
                     end
                     
+                end
+                
+            end
+        end
+    end
+end
+
+                    
+                
+            
+            
+            
                                     
 %                     figure, 
 %                     subplot(1,5,1), imagesc(readDicom), colormap bone, title('Original Image');
@@ -196,11 +307,12 @@ for counter_0=1:numFolders_0
 %                      subplot(1,2,1),imagesc(readDicom), colormap bone, title('Original Image');
 %                      subplot(1,2,2),imagesc(dicomRotate2),colormap bone, title('Processed Image')
                      
-                end
-            end
-        end
-    end
-end
+               % end
+            %end
+       % end
+    %end
+%end
+
 
 
 
