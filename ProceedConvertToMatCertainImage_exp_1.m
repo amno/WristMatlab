@@ -133,7 +133,7 @@ for counter_0=1:numFolders_0
                                         %close all;
                                         figure,
                                         subplot(1,2,1),imagesc(readDicom), colormap bone, title('Original Image');
-                                        subplot(1,2,2),imagesc(dicomRotate2),colormap bone, title('Processed Image_MN2')
+                                        subplot(1,2,2),imagesc(dicomRotate2),colormap bone, title("ThetaDegree "+thetaPeak+" "+infoDicom.BodyPartExamined+" "+infoDicom.PhotometricInterpretation);
                                     else
                                         saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PositionPhotoMetricTheta\Normals\PA\Monochrome2\OutCategory\ANON_N_');
                                         %saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PhotoMetricAndTheta\Normals\Monochrome2\OutCategory\ANON_N_');
@@ -175,7 +175,7 @@ for counter_0=1:numFolders_0
                                         %close all;
                                         figure,
                                         subplot(1,2,1),imagesc(readDicom), colormap bone, title('Original Image');
-                                        subplot(1,2,2),imagesc(dicomRotate2),colormap bone, title('Processed Image_MN2')
+                                        subplot(1,2,2),imagesc(dicomRotate2),colormap bone, title("ThetaDegree "+thetaPeak+" "+infoDicom.BodyPartExamined+" "+infoDicom.PhotometricInterpretation);
                                     else
                                         saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PositionPhotoMetricTheta\Normals\LA\Monochrome2\OutCategory\ANON_N_');
                                         %saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PhotoMetricAndTheta\Normals\Monochrome2\OutCategory\ANON_N_');
@@ -183,8 +183,13 @@ for counter_0=1:numFolders_0
                                         %save( [saveDir infoDicom.PatientID] ,'readDicom','infoDicom','maskDicom');
                                         save( [saveDir infoDicom.PatientID] ,'readDicom','infoDicom','BW_P','thetaPeak','dicomRotate2');
                                     end
-                                end 
+                                end
                             end
+                            %this is for bodypartexamined other than
+                            %WRIST part
+                        else
+                            saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PositionPhotoMetricTheta\Normals\Others\ANON_N_');
+                            save( [saveDir infoDicom.PatientID] ,'readDicom','infoDicom','BW_P','thetaPeak','dicomRotate2');
                         end
                         
                     elseif ChooseDir == 1 % still in process of code updating to accomodate infoDicom.ViewPosition attribute
@@ -270,6 +275,11 @@ for counter_0=1:numFolders_0
                                     end
                                 end
                             end
+                        %this is for bodypartexamined other than
+                        %WRIST part
+                        else
+                            saveDir= strcat(baseDir,filesep,'DICOM_Karen_ANDUpdate\PositionPhotoMetricTheta\Patients\Others\ANON_P_');
+                            save( [saveDir infoDicom.PatientID] ,'readDicom','infoDicom','BW_P','thetaPeak','dicomRotate2');
                         end
                     end
                     
