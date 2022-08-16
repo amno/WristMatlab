@@ -1,5 +1,5 @@
 # WristMatlab
-This space is intended as a space of a little simple code to process image using matlab as wrist x-ray dicom image as case example.
+This space is intended as a space of my little work to process X-ray images using Matlab as wrist x-ray dicom image as case example.
 
 This space is my PhD works repository. Many files here are purely experimental. 
 Files and Folders are still not in a good arrangement yet.
