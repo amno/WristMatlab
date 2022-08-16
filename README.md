@@ -16,3 +16,5 @@ Several publications have been produced based on works saved in this space:
 The Wrist X-ray images were taken from the MURA data set that could be accessed publicly but by request. This data set has published its information in an article as citation below:
 
 P. Rajpurkar et al., ‘MURA: Large Dataset for Abnormality Detection in Musculoskeletal Radiographs’, arXiv:1712.06957 [physics], Dec. 2017, Accessed: Jul. 30, 2019. [Online]. Available: http://arxiv.org/abs/1712.06957
+
+![PA_Resnet50_fromOriFig5DMIPA](https://user-images.githubusercontent.com/4032167/184919953-210b9288-c685-4f54-bf0c-680b52d351a9.png)
