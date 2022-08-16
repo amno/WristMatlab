@@ -17,4 +17,5 @@ The Wrist X-ray images were taken from the MURA data set that could be accessed 
 
 P. Rajpurkar et al., ‘MURA: Large Dataset for Abnormality Detection in Musculoskeletal Radiographs’, arXiv:1712.06957 [physics], Dec. 2017, Accessed: Jul. 30, 2019. [Online]. Available: http://arxiv.org/abs/1712.06957
 
+![CAMKarenCLAHEExp](https://user-images.githubusercontent.com/4032167/184920305-10a3ac35-3cb4-4a9a-8649-9de7c21993ac.jpg)
 
