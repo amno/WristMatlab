@@ -1,4 +1,4 @@
-# WristMatlab
+# Wrist Fractures Analysis as observed with X-ray imaging
 This space is intended as a space of my little work to process X-ray images using Matlab as wrist x-ray dicom image as case example.
 
 The title of my submitted PhD thesis is **Wrist Fractures Analysis as observed with X-ray imaging**.
