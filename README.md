@@ -19,3 +19,6 @@ P. Rajpurkar et al., ‘MURA: Large Dataset for Abnormality Detection in Musculo
 
 ![CAMKarenCLAHEExp](https://user-images.githubusercontent.com/4032167/184920305-10a3ac35-3cb4-4a9a-8649-9de7c21993ac.jpg)
 
+
+
+![CAM_PA_metalPlatted](https://user-images.githubusercontent.com/4032167/184920488-81c4187b-4534-4e70-966f-cc9b3e1f96b8.jpg)
